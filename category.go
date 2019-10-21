@@ -55,7 +55,8 @@ type productIDResponse struct {
 	Results []int `json:"results"`
 }
 
-// SearchCategoryProducts for product ids
+// SearchCategoryProducts for product ids that match the filters
+// this also supports paging by setting the limit offset values
 func (client *Client) SearchCategoryProducts(categoryID int, search SearchParams) ([]int, error) {
 	url := generateURL("catalog/categories/" + strconv.Itoa(categoryID) + "/search")
 
