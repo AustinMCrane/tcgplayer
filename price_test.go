@@ -4,6 +4,7 @@ import (
 	"log"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -41,4 +42,30 @@ func TestListSKUMarketPrices(t *testing.T) {
 	// should return not found
 	prices, err = client.ListSKUMarketPrices(notACategoryID)
 	require.Error(t, err)
+}
+
+func TestListProductMarketPrices(t *testing.T) {
+	client, err := New(*publicKey, *privateKey)
+	require.NoError(t, err)
+
+	search := SearchParams{
+		Offset: 0,
+		Limit:  100,
+		Sort:   "MinPrice DESC",
+		Filters: []Filter{
+			Filter{Name: "ProductName", Values: []string{"Dark Magician Girl"}},
+		},
+	}
+
+	productIDs, err := client.SearchCategoryProducts(yugiohCategoryID, search)
+	require.NoError(t, err)
+
+	log.Println(productIDs)
+	for _, p := range productIDs {
+		prices, err := client.ListProductMarketPrices(p)
+		require.NoError(t, err)
+		for _, pr := range prices {
+			assert.Greater(t, pr.LowPrice, 0.0)
+		}
+	}
 }

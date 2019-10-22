@@ -26,6 +26,14 @@ func printPricing(p *tcgplayer.MarketPrice) {
 		log.Println(str)
 	}
 }
+
+func printProductDetails(p *tcgplayer.ProductDetail) {
+	if p != nil {
+		str := fmt.Sprintf("Name: %s\nClean Name: %s\nImage URL: %s\n", p.Name, p.CleanName, p.ImageURL)
+		log.Println(str)
+	}
+}
+
 func main() {
 	flag.Parse()
 
@@ -43,6 +51,12 @@ func main() {
 
 	productIDs, err := client.SearchCategoryProducts(*categoryID, search)
 	handleError(err)
+
+	for _, p := range productIDs {
+		details, err := client.GetProductDetails(p)
+		handleError(err)
+		printProductDetails(details[0])
+	}
 
 	productID := productIDs[0]
 
