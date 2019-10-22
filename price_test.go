@@ -1,7 +1,6 @@
 package tcgplayer
 
 import (
-	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -37,7 +36,6 @@ func TestListSKUMarketPrices(t *testing.T) {
 	prices, err := client.ListSKUMarketPrices(sku.SkuID)
 	require.NoError(t, err)
 	require.NotEqual(t, prices[0].LowPrice, 0)
-	log.Println(prices[0].LowPrice)
 
 	// should return not found
 	prices, err = client.ListSKUMarketPrices(notACategoryID)
@@ -60,7 +58,6 @@ func TestListProductMarketPrices(t *testing.T) {
 	productIDs, err := client.SearchCategoryProducts(yugiohCategoryID, search)
 	require.NoError(t, err)
 
-	log.Println(productIDs)
 	for _, p := range productIDs {
 		prices, err := client.ListProductMarketPrices(p)
 		require.NoError(t, err)
