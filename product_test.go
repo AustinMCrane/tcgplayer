@@ -36,7 +36,7 @@ func TestProductDetails(t *testing.T) {
 
 	productID := productIDs[0]
 
-	details, err := client.GetProductDetails(productID)
+	details, err := client.GetProductDetails(productID, true, true)
 	require.NoError(t, err)
 
 	require.Equal(t, details[0].Name, "Dark Magician")

@@ -1,6 +1,7 @@
 package tcgplayer
 
 import (
+	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -49,7 +50,7 @@ func TestListProductMarketPrices(t *testing.T) {
 	search := SearchParams{
 		Offset: 0,
 		Limit:  100,
-		Sort:   "MinPrice DESC",
+		Sort:   "MinPrice ASC",
 		Filters: []Filter{
 			Filter{Name: "ProductName", Values: []string{"Dark Magician Girl"}},
 		},
@@ -65,4 +66,24 @@ func TestListProductMarketPrices(t *testing.T) {
 			assert.Greater(t, pr.LowPrice, 0.0)
 		}
 	}
+}
+
+func TestGetProductMarketPrice(t *testing.T) {
+	client, err := New(*publicKey, *privateKey)
+	require.NoError(t, err)
+
+	search := SearchParams{
+		Offset: 0,
+		Limit:  100,
+		Sort:   "MinPrice ASC",
+		Filters: []Filter{
+			Filter{Name: "ProductName", Values: []string{"Dark Magician Girl"}},
+		},
+	}
+
+	prices, err := client.GetProductMarketPrice(yugiohCategoryID, search)
+	require.NoError(t, err)
+	require.Greater(t, len(prices), 0)
+
+	log.Println(prices)
 }

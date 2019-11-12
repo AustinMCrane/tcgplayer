@@ -1,7 +1,13 @@
 package tcgplayer
 
 import (
+	"net/url"
 	"strconv"
+)
+
+const (
+	CategoryTypeMagic = iota + 1
+	CategoryTypeYugioh
 )
 
 type Category struct {
@@ -58,10 +64,18 @@ type productIDResponse struct {
 // SearchCategoryProducts for product ids that match the filters
 // this also supports paging by setting the limit offset values
 func (client *Client) SearchCategoryProducts(categoryID int, search SearchParams) ([]int, error) {
-	url := generateURL("catalog/categories/" + strconv.Itoa(categoryID) + "/search")
+	route := generateURL("catalog/categories/" + strconv.Itoa(categoryID) + "/search")
+
+	// NOTE: this is a hack. i might need to create a seperate function
+	// just to get product that matches the product name exact
+	for _, f := range search.Filters {
+		if f.Name == "ProductName" {
+			route += "?productName=" + url.QueryEscape(f.Values[0])
+		}
+	}
 
 	var productIDs productIDResponse
-	err := client.post(url, search, &productIDs)
+	err := client.post(route, search, &productIDs)
 	if err != nil {
 		return nil, err
 	}
