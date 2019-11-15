@@ -84,6 +84,7 @@ func TestGetProductMarketPrice(t *testing.T) {
 	prices, err := client.GetProductMarketPrice(yugiohCategoryID, search)
 	require.NoError(t, err)
 	require.Greater(t, len(prices), 0)
-
-	log.Println(prices)
+	for _, p := range prices {
+		log.Println(p)
+	}
 }
