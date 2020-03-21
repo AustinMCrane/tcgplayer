@@ -28,6 +28,7 @@ type APIParams interface {
 type ProductParams struct {
 	ProductName string `json:"productName"`
 	CategoryID  int    `json:"categoryId"`
+	GroupName   string `json:"groupName"`
 }
 
 type SKU struct {
@@ -47,6 +48,10 @@ func (client *Client) ListAllProducts(params ProductParams) ([]*Product, error) 
 	var productAPIResponse ProductListAPIResponse
 	u := "/catalog/products?productName=" + url.QueryEscape(params.ProductName) +
 		"&categoryId=" + strconv.Itoa(params.CategoryID)
+	if params.GroupName != "" {
+		u = u + "&groupName=" + url.QueryEscape(params.GroupName)
+	}
+
 	err := get(client, u, params, &productAPIResponse)
 	if err != nil {
 		return nil, err

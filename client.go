@@ -2,10 +2,11 @@ package tcgplayer
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/pkg/errors"
 )
 
 const (
@@ -70,12 +71,21 @@ func get(client *Client, path string, p APIParams, apiResponse interface{}) erro
 	}
 	res, err := c.Do(req)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "response error")
 	}
+
+	/*
+		bodyBytes, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+		bodyString := string(bodyBytes)
+		log.Println(bodyString)
+	*/
 
 	err = json.NewDecoder(res.Body).Decode(&apiResponse)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "json parsing error")
 	}
 
 	if res.StatusCode != 200 {

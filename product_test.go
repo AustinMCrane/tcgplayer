@@ -1,6 +1,7 @@
 package tcgplayer
 
 import (
+	"log"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -8,7 +9,8 @@ import (
 
 func TestListAllPRoducts(t *testing.T) {
 	params := ProductParams{
-		ProductName: "Dark Magician",
+		GroupName:   "Duel Overload",
+		ProductName: "Crystron Halqifibrax",
 		CategoryID:  CategoryYugioh,
 	}
 	client, err := New(*publicKey, *privateKey)
@@ -16,7 +18,10 @@ func TestListAllPRoducts(t *testing.T) {
 
 	products, err := client.ListAllProducts(params)
 	require.NoError(t, err)
-	require.True(t, len(products) > 0)
+	require.True(t, len(products) == 1)
+
+	product := products[0]
+	require.Equal(t, product.Name, params.ProductName)
 }
 
 func TestListProductSKUs(t *testing.T) {
@@ -37,4 +42,30 @@ func TestGetGroupDetails(t *testing.T) {
 	group, err := client.GetGroupDetails(groupID)
 	require.NoError(t, err)
 	require.NotNil(t, group)
+}
+
+func TestPriceOfNeedleFiber(t *testing.T) {
+	params := ProductParams{
+		GroupName:   "Duel Overload",
+		ProductName: "Crystron Halqifibrax",
+		CategoryID:  CategoryYugioh,
+	}
+	client, err := New(*publicKey, *privateKey)
+	require.NoError(t, err)
+
+	products, err := client.ListAllProducts(params)
+	require.NoError(t, err)
+	require.True(t, len(products) == 1)
+
+	product := products[0]
+	require.Equal(t, product.Name, params.ProductName)
+
+	skus, err := client.ListProductSKUs(product.ID)
+	require.NoError(t, err)
+	require.True(t, len(skus) > 0)
+
+	prices, err := client.GetSKUPrices([]int{skus[0].SKUID})
+	require.NoError(t, err)
+	require.True(t, len(prices) > 0)
+	log.Println(prices[0])
 }

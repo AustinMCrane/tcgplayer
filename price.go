@@ -1,6 +1,7 @@
 package tcgplayer
 
 import (
+	"fmt"
 	"strconv"
 )
 
@@ -11,6 +12,14 @@ type SKUMarketPrice struct {
 	LowestListingPrice float64 `json:"lowestListingPrice"`
 	MarketPrice        float64 `json:"marketPrice"`
 	DirectLowPrice     float64 `json:"directLowPrice"`
+}
+
+func (p *SKUMarketPrice) String() string {
+	s := fmt.Sprintf("Low Price: %f\nLowest Shipping: %f\n"+
+		"Lowest Listing Price: %f\nMarket Price: %f\nDirect Low Price: %f\n",
+		p.LowPrice, p.LowestShipping, p.LowestListingPrice, p.MarketPrice, p.DirectLowPrice)
+
+	return s
 }
 
 type SKUMarketPriceListResponse struct {
