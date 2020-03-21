@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	publicKey   = flag.String("public-key", "7D25C5AC-0585-495D-A180-67E57E4ABE96", "tcgplayer public key from developer program")
-	privateKey  = flag.String("private-key", "3ADB0B1F-1FEA-4242-9437-ECEC8F957B1F", "tcgplayer private key from developer program")
+	publicKey   = flag.String("public-key", "", "tcgplayer public key from developer program")
+	privateKey  = flag.String("private-key", "", "tcgplayer private key from developer program")
 	productName = flag.String("product-name", "Dark Magician", "product name")
 	categoryID  = flag.Int("category-id", tcgplayer.CategoryYugioh, "category id to use")
 )
