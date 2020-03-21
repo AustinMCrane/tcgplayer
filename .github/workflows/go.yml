@@ -27,4 +27,4 @@ jobs:
     - name: Build
       run: go build -v .
     - name: Test
-      run: go test -v -arg -public-key $PUBLIC_KEY -private-key $PRIVATE_KEY
+      run: go test -v -args -public-key $PUBLIC_KEY -private-key $PRIVATE_KEY
