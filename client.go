@@ -1,8 +1,11 @@
 package tcgplayer
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
+	"net/http"
 )
 
 const (
@@ -19,6 +22,10 @@ type AuthToken struct {
 	TokenType   string `json:"token_type"`
 	Issued      string `json:".issued"`
 	Expires     string `json:".expires"`
+}
+
+type APIResponse struct {
+	Results interface{} `json:"results"`
 }
 
 type Client struct {
@@ -44,4 +51,37 @@ func New(publicKey string, privateKey string) (*Client, error) {
 
 func generateURL(path string) string {
 	return fmt.Sprintf("%s/%s/%s", baseURL, CurrentVersion, path)
+}
+
+func get(client *Client, path string, p APIParams, apiResponse interface{}) error {
+
+	c := &http.Client{}
+
+	url := generateURL(path)
+	req, err := http.NewRequest("GET", url, nil)
+	/*
+		q := req.URL.Query()
+		if p != nil {
+			p.SetQueryParams(&q)
+		}*/
+	req.Header.Set("Authorization", "bearer "+client.authToken.AccessToken)
+	if err != nil {
+		return err
+	}
+	res, err := c.Do(req)
+	if err != nil {
+		return err
+	}
+
+	err = json.NewDecoder(res.Body).Decode(&apiResponse)
+	if err != nil {
+		return err
+	}
+
+	if res.StatusCode != 200 {
+		log.Println(res.StatusCode)
+		return errors.New("not 200")
+	}
+
+	return nil
 }
