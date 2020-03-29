@@ -10,15 +10,32 @@ const (
 	CategoryYugioh = 2
 )
 
+type ExtendedData struct {
+	Name        string `json:"name"`
+	DisplayName string `json:"displayName"`
+	Value       string `json:"value"`
+}
+
 type Product struct {
-	ID         int    `json:"productId"`
-	Name       string `json:"name"`
-	CleanName  string `json:"cleanName"`
-	ImageURL   string `json:"imageUrl"`
-	CategoryID int    `json:"categoryId"`
-	GroupID    int    `json:"groupId"`
-	URL        string `json:"url"`
+	ID           int            `json:"productId"`
+	Name         string         `json:"name"`
+	CleanName    string         `json:"cleanName"`
+	ImageURL     string         `json:"imageUrl"`
+	CategoryID   int            `json:"categoryId"`
+	GroupID      int            `json:"groupId"`
+	URL          string         `json:"url"`
+	ExtendedData []ExtendedData `json:"extendedData"`
 	//ModifiedOn time.Time `json:"modifiedOn"`
+}
+
+func (p *Product) GetExtendedData(name string) (*ExtendedData, error) {
+	for _, e := range p.ExtendedData {
+		if e.Name == name {
+			return &e, nil
+		}
+	}
+
+	return nil, errors.New("unable to find extended data for name " + name)
 }
 
 type APIParams interface {
@@ -46,7 +63,7 @@ type ProductListAPIResponse struct {
 
 func (client *Client) ListAllProducts(params ProductParams) ([]*Product, error) {
 	var productAPIResponse ProductListAPIResponse
-	u := "/catalog/products?productName=" + url.QueryEscape(params.ProductName) +
+	u := "/catalog/products?getExtendedFields=true&productName=" + url.QueryEscape(params.ProductName) +
 		"&categoryId=" + strconv.Itoa(params.CategoryID)
 	if params.GroupName != "" {
 		u = u + "&groupName=" + url.QueryEscape(params.GroupName)
