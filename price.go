@@ -3,6 +3,8 @@ package tcgplayer
 import (
 	"fmt"
 	"strconv"
+
+	"github.com/pkg/errors"
 )
 
 type SKUMarketPrice struct {
@@ -26,6 +28,40 @@ type SKUMarketPriceListResponse struct {
 	Results []*SKUMarketPrice
 }
 
+func (client *Client) GetProductPrice(categoryID int, cardName string, setName string) (*SKUMarketPrice, error) {
+	params := ProductParams{
+		GroupName:   setName,
+		ProductName: cardName,
+		CategoryID:  categoryID,
+	}
+	products, err := client.ListAllProducts(params)
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to get prices")
+	}
+
+	if len(products) > 0 {
+
+		product := products[0]
+
+		skus, err := client.ListProductSKUs(product.ID)
+		if err != nil {
+			return nil, errors.Wrap(err, "unable to get skus")
+		}
+
+		if len(skus) > 0 {
+			pr, err := client.GetSKUPrices([]int{skus[0].SKUID})
+			if err != nil {
+				return nil, errors.Wrap(err, "unable to get sku prices")
+			}
+
+			if len(pr) > 0 {
+				return pr[0], nil
+			}
+		}
+	}
+
+	return nil, nil
+}
 func (client *Client) GetSKUPrices(skus []int) ([]*SKUMarketPrice, error) {
 	var priceResponse SKUMarketPriceListResponse
 	skuList := ""
