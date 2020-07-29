@@ -46,6 +46,7 @@ func (client *Client) GetProductPrice(categoryID int, cardName string, setName s
 		log.Println(fmt.Sprintf("here: %+v", p.ExtendedData))
 		rarity, err := p.GetExtendedData("Rarity")
 		if err != nil {
+			log.Println("THINGS")
 			return nil, errors.Wrap(err, "unable to get product")
 		}
 		log.Println("YEP: ", rarity.Value, rarityName, rarity.Value == rarityName)
