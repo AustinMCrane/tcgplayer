@@ -50,6 +50,7 @@ func (client *Client) GetProductPrice(categoryID int, cardName string, setName s
 		}
 		log.Println(rarity.Value)
 		if rarity.Value == rarityName {
+			log.Println("HERE WITH THE THINGS")
 			product = p
 		}
 	}
