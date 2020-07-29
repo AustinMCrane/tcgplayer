@@ -2,7 +2,6 @@ package tcgplayer
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 
 	"github.com/pkg/errors"
@@ -43,20 +42,16 @@ func (client *Client) GetProductPrice(categoryID int, cardName string, setName s
 	var product *Product
 	for _, p := range products {
 
-		log.Println(fmt.Sprintf("here: %+v", p.ExtendedData))
 		rarity, err := p.GetExtendedData("Rarity")
 		if err != nil {
-			log.Println("THINGS")
 			return nil, errors.Wrap(err, "unable to get product")
 		}
-		log.Println("YEP: ", rarity.Value, rarityName, rarity.Value == rarityName)
 		if rarity.Value == rarityName {
-			log.Println("HERE WITH THE THINGS")
 			product = p
 		}
 	}
 
-	if product != nil {
+	if product == nil {
 		return nil, errors.New("unable to find product")
 	}
 
