@@ -41,25 +41,34 @@ func (client *Client) GetProductPrice(categoryID int, cardName string, setName s
 	}
 
 	log.Println(fmt.Sprintf("here: %+v", products))
-
-	if len(products) > 0 {
-
-		product := products[0]
-
-		skus, err := client.ListProductSKUs(product.ID)
+	var product *Product
+	for _, p := range products {
+		rarity, err := p.GetExtendedData("Rarity")
 		if err != nil {
-			return nil, errors.Wrap(err, "unable to get skus")
+			return nil, errors.Wrap(err, "unable to get product")
+		}
+		if rarity.Value == rarityName {
+			product = p
+		}
+	}
+
+	if product != nil {
+		return nil, errors.New("unable to find product")
+	}
+
+	skus, err := client.ListProductSKUs(product.ID)
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to get skus")
+	}
+
+	if len(skus) > 0 {
+		pr, err := client.GetSKUPrices([]int{skus[0].SKUID})
+		if err != nil {
+			return nil, errors.Wrap(err, "unable to get sku prices")
 		}
 
-		if len(skus) > 0 {
-			pr, err := client.GetSKUPrices([]int{skus[0].SKUID})
-			if err != nil {
-				return nil, errors.Wrap(err, "unable to get sku prices")
-			}
-
-			if len(pr) > 0 {
-				return pr[0], nil
-			}
+		if len(pr) > 0 {
+			return pr[0], nil
 		}
 	}
 

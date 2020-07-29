@@ -37,6 +37,9 @@ func main() {
 		log.Fatalf("error ", err)
 	}
 
+	for _, p := range products {
+		log.Println(p.ExtendedData)
+	}
 	if len(products) == 0 {
 		log.Fatalf("did not find product with name ", *productName)
 	}
