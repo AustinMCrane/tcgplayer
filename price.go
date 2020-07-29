@@ -2,6 +2,7 @@ package tcgplayer
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/pkg/errors"
@@ -28,7 +29,7 @@ type SKUMarketPriceListResponse struct {
 	Results []*SKUMarketPrice
 }
 
-func (client *Client) GetProductPrice(categoryID int, cardName string, setName string) (*SKUMarketPrice, error) {
+func (client *Client) GetProductPrice(categoryID int, cardName string, setName string, rarityName string) (*SKUMarketPrice, error) {
 	params := ProductParams{
 		GroupName:   setName,
 		ProductName: cardName,
@@ -38,6 +39,8 @@ func (client *Client) GetProductPrice(categoryID int, cardName string, setName s
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get prices")
 	}
+
+	log.Println(fmt.Sprintf("here: %+v", products))
 
 	if len(products) > 0 {
 

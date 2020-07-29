@@ -32,7 +32,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("error ", err)
 	}
-	products, err := client.ListAllProducts(params)
+	products, err := client.ListAllProducts(params, 0, 100)
 	if err != nil {
 		log.Fatalf("error ", err)
 	}
