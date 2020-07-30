@@ -2,6 +2,7 @@ package tcgplayer
 
 import (
 	"errors"
+	"fmt"
 	"net/url"
 	"strconv"
 )
@@ -46,6 +47,9 @@ type ProductParams struct {
 	ProductName string `json:"productName"`
 	CategoryID  int    `json:"categoryId"`
 	GroupName   string `json:"groupName"`
+	Limit       int    `json:"limit"`
+	Offset      int    `json:"offset"`
+	Sort        string `json:"sort"`
 }
 
 type SKU struct {
@@ -67,6 +71,14 @@ func (client *Client) ListAllProducts(params ProductParams) ([]*Product, error) 
 		"&categoryId=" + strconv.Itoa(params.CategoryID)
 	if params.GroupName != "" {
 		u = u + "&groupName=" + url.QueryEscape(params.GroupName)
+	}
+
+	if params.Limit != 0 {
+		u = u + "&limit=" + fmt.Sprintf("%d", params.Limit)
+	}
+
+	if params.Offset != 0 {
+		u = u + "&offset=" + fmt.Sprintf("%d", params.Offset)
 	}
 
 	err := get(client, u, params, &productAPIResponse)

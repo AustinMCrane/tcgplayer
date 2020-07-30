@@ -24,6 +24,20 @@ func TestListAllPRoducts(t *testing.T) {
 	require.Equal(t, product.Name, params.ProductName)
 }
 
+func TestListAllPRoductsPage(t *testing.T) {
+	params := ProductParams{
+		CategoryID: CategoryYugioh,
+		Limit:      10,
+		Offset:     10,
+	}
+	client, err := New(*publicKey, *privateKey)
+	require.NoError(t, err)
+
+	products, err := client.ListAllProducts(params)
+	require.NoError(t, err)
+	require.True(t, len(products) == params.Limit)
+}
+
 func TestListProductSKUs(t *testing.T) {
 	client, err := New(*publicKey, *privateKey)
 	require.NoError(t, err)
