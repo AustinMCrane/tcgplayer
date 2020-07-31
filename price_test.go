@@ -1,6 +1,7 @@
 package tcgplayer
 
 import (
+	"log"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -35,4 +36,14 @@ func TestGetSKUPricesForDarkMagician(t *testing.T) {
 	prices, err := client.GetSKUPrices([]int{skus[0].SKUID})
 	require.NoError(t, err)
 	require.True(t, len(prices) > 0)
+}
+
+func TestGetProductPriceWithProductID(t *testing.T) {
+	productID := 21715
+	client, err := New(*publicKey, *privateKey)
+	require.NoError(t, err)
+
+	prices, err := client.GetProductPriceWithProductID(productID)
+	require.NoError(t, err)
+	log.Println(prices)
 }
