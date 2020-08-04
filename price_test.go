@@ -1,6 +1,7 @@
 package tcgplayer
 
 import (
+	"fmt"
 	"log"
 	"testing"
 
@@ -28,6 +29,8 @@ func TestGetSKUPricesForDarkMagician(t *testing.T) {
 	products, err := client.ListAllProducts(params)
 	require.NoError(t, err)
 	require.True(t, len(products) > 0)
+	product := products[0]
+	log.Println(fmt.Sprintf("%+v", product))
 
 	skus, err := client.ListProductSKUs(products[0].ID)
 	require.NoError(t, err)
@@ -39,11 +42,13 @@ func TestGetSKUPricesForDarkMagician(t *testing.T) {
 }
 
 func TestGetProductPriceWithProductID(t *testing.T) {
-	productID := 21715
+	productID := 21876
 	client, err := New(*publicKey, *privateKey)
 	require.NoError(t, err)
 
 	prices, err := client.GetProductPriceWithProductID(productID)
 	require.NoError(t, err)
-	log.Println(prices)
+	for _, p := range prices {
+		log.Println(fmt.Sprintf("%+v %+v", p.SKU, p.Price))
+	}
 }

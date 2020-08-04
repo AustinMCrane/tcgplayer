@@ -17,6 +17,11 @@ type SKUMarketPrice struct {
 	DirectLowPrice     float64 `json:"directLowPrice"`
 }
 
+type DetailedSKUPrice struct {
+	SKU   *SKU            `json:"sku"`
+	Price *SKUMarketPrice `json:"price"`
+}
+
 func (p *SKUMarketPrice) String() string {
 	s := fmt.Sprintf("Low Price: %f\nLowest Shipping: %f\n"+
 		"Lowest Listing Price: %f\nMarket Price: %f\nDirect Low Price: %f\n",
@@ -29,27 +34,36 @@ type SKUMarketPriceListResponse struct {
 	Results []*SKUMarketPrice
 }
 
-func (client *Client) GetProductPriceWithProductID(productID int) (*SKUMarketPrice, error) {
+func (client *Client) GetProductPriceWithProductID(productID int) ([]*DetailedSKUPrice, error) {
 	skus, err := client.ListProductSKUs(productID)
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to get skus")
 	}
 
-	if len(skus) > 0 {
-		for _, s := range skus {
-			log.Println(s)
-		}
-		pr, err := client.GetSKUPrices([]int{skus[0].SKUID})
-		if err != nil {
-			return nil, errors.Wrap(err, "unable to get sku prices")
-		}
+	skuIDs := []int{}
+	for _, sku := range skus {
+		skuIDs = append(skuIDs, sku.SKUID)
+	}
 
-		if len(pr) > 0 {
-			return pr[0], nil
+	log.Println("LEN: ", len(skuIDs))
+	pr, err := client.GetSKUPrices(skuIDs)
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to get sku prices")
+	}
+
+	skuPrices := []*DetailedSKUPrice{}
+	for _, p := range pr {
+		for _, sku := range skus {
+			if sku.SKUID == p.SKUID {
+				skuPrices = append(skuPrices, &DetailedSKUPrice{
+					SKU:   sku,
+					Price: p,
+				})
+			}
 		}
 	}
 
-	return nil, nil
+	return skuPrices, nil
 }
 
 func (client *Client) GetProductPrice(categoryID int, cardName string, setName string, rarityName string) (*SKUMarketPrice, error) {
@@ -97,6 +111,7 @@ func (client *Client) GetProductPrice(categoryID int, cardName string, setName s
 
 	return nil, nil
 }
+
 func (client *Client) GetSKUPrices(skus []int) ([]*SKUMarketPrice, error) {
 	var priceResponse SKUMarketPriceListResponse
 	skuList := ""

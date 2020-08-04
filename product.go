@@ -53,7 +53,11 @@ type ProductParams struct {
 }
 
 type SKU struct {
-	SKUID int `json:"skuId"`
+	SKUID       int `json:"skuId"`
+	ProductID   int `json:"productId"`
+	LanguageID  int `json:"languageId"`
+	PrintingID  int `json:"printingId"`
+	ConditionID int `json:"conditionId"`
 }
 
 func (p ProductParams) SetQueryParams(q *url.Values) {
@@ -126,4 +130,53 @@ func (client *Client) GetGroupDetails(groupID int) (*Group, error) {
 	}
 
 	return groupAPIResponse.Results[0], nil
+}
+
+type Condition struct {
+	ConditionID  int    `json:"conditionId"`
+	Name         string `json:"name"`
+	Abbreviation string `json:"abbreviation"`
+	DisplayOrder int    `json:"displayOrder"`
+}
+
+type ConditionAPIResponse struct {
+	Results []*Condition `json:"results"`
+}
+
+func (client *Client) GetConditions(categoryID int) ([]*Condition, error) {
+	var conditionAPIResponse ConditionAPIResponse
+	err := get(client, "/catalog/categories/"+strconv.Itoa(categoryID)+"/conditions", nil, &conditionAPIResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(conditionAPIResponse.Results) == 0 {
+		return nil, errors.New("did not find any conditions")
+	}
+
+	return conditionAPIResponse.Results, nil
+}
+
+type Printing struct {
+	PrintingID   int    `json:"printingId"`
+	Name         string `json:"name"`
+	DisplayOrder int    `json:"displayOrder"`
+}
+
+type PrintingAPIResponse struct {
+	Results []*Printing `json:"results"`
+}
+
+func (client *Client) GetPrintings(categoryID int) ([]*Printing, error) {
+	var printingAPIResponse PrintingAPIResponse
+	err := get(client, "/catalog/categories/"+strconv.Itoa(categoryID)+"/printings", nil, &printingAPIResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(printingAPIResponse.Results) == 0 {
+		return nil, errors.New("did not find any printings")
+	}
+
+	return printingAPIResponse.Results, nil
 }
