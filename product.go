@@ -156,27 +156,3 @@ func (client *Client) GetConditions(categoryID int) ([]*Condition, error) {
 
 	return conditionAPIResponse.Results, nil
 }
-
-type Printing struct {
-	PrintingID   int    `json:"printingId"`
-	Name         string `json:"name"`
-	DisplayOrder int    `json:"displayOrder"`
-}
-
-type PrintingAPIResponse struct {
-	Results []*Printing `json:"results"`
-}
-
-func (client *Client) GetPrintings(categoryID int) ([]*Printing, error) {
-	var printingAPIResponse PrintingAPIResponse
-	err := get(client, "/catalog/categories/"+strconv.Itoa(categoryID)+"/printings", nil, &printingAPIResponse)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(printingAPIResponse.Results) == 0 {
-		return nil, errors.New("did not find any printings")
-	}
-
-	return printingAPIResponse.Results, nil
-}
