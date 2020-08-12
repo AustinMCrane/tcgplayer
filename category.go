@@ -15,7 +15,7 @@ type CategoryAPIResponse struct {
 
 func (client *Client) GetCategories() ([]*Category, error) {
 	var resp CategoryAPIResponse
-	err := get(client, "/catalog/categories", nil, &resp)
+	err := get(client, "/catalog/categories?limit=40", nil, &resp)
 	if err != nil {
 		return nil, err
 	}
