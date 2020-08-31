@@ -7,7 +7,7 @@ import (
 )
 
 type Language struct {
-	ID           int    `json:"id"`
+	ID           int    `json:"languageId"`
 	Name         string `json:"name"`
 	Abbreviation string `json:"abbr"`
 }
