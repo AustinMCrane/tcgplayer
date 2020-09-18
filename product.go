@@ -100,7 +100,7 @@ func (client *Client) GetProductDetails(productID int) (*Product, error) {
 		return nil, err
 	}
 
-	if len(productAPIResponse.Response) > 0 {
+	if len(productAPIResponse.Response) == 0 {
 		return nil, errors.New("unable to find product detail")
 	}
 
