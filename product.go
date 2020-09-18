@@ -93,6 +93,20 @@ func (client *Client) ListAllProducts(params ProductParams) ([]*Product, error) 
 	return productAPIResponse.Response, nil
 }
 
+func (client *Client) GetProductDetails(productID int) (*Product, error) {
+	var productAPIResponse ProductListAPIResponse
+	err := get(client, "/catalog/products/"+strconv.Itoa(productID), nil, &productAPIResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(productAPIResponse.Response) > 0 {
+		return nil, errors.New("unable to find product detail")
+	}
+
+	return productAPIResponse.Response[0], nil
+}
+
 type SKUListAPIResponse struct {
 	Results []*SKU `json:"results"`
 }
