@@ -127,3 +127,17 @@ func (client *Client) GetGroupDetails(groupID int) (*Group, error) {
 
 	return groupAPIResponse.Results[0], nil
 }
+
+func (client *Client) GetProduct(productID int) (*Product, error) {
+	var productAPIResponse ProductListAPIResponse
+	err := get(client, "/catalog/products/"+strconv.Itoa(productID), nil, &productAPIResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(productAPIResponse.Response) == 0 {
+		return nil, errors.New("did not find any groups")
+	}
+
+	return productAPIResponse.Response[0], nil
+}
