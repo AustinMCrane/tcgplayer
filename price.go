@@ -2,7 +2,6 @@ package tcgplayer
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 
 	"github.com/pkg/errors"
@@ -36,9 +35,6 @@ func (client *Client) GetProductPriceWithProductID(productID int) (*SKUMarketPri
 	}
 
 	if len(skus) > 0 {
-		for _, s := range skus {
-			log.Println(s)
-		}
 		pr, err := client.GetSKUPrices([]int{skus[0].SKUID})
 		if err != nil {
 			return nil, errors.Wrap(err, "unable to get sku prices")
@@ -49,6 +45,7 @@ func (client *Client) GetProductPriceWithProductID(productID int) (*SKUMarketPri
 		}
 	}
 
+	// was not found
 	return nil, nil
 }
 

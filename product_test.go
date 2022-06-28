@@ -83,3 +83,10 @@ func TestPriceOfNeedleFiber(t *testing.T) {
 	require.True(t, len(prices) > 0)
 	log.Println(prices[0])
 }
+
+func TestGetProduct(t *testing.T) {
+	client, err := New(*publicKey, *privateKey)
+	product, err := client.GetProduct(123)
+	require.NoError(t, err)
+	log.Println(product)
+}
