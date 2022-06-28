@@ -1,7 +1,6 @@
 package tcgplayer
 
 import (
-	"log"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -43,7 +42,7 @@ func TestGetProductPriceWithProductID(t *testing.T) {
 	client, err := New(*publicKey, *privateKey)
 	require.NoError(t, err)
 
-	prices, err := client.GetProductPriceWithProductID(productID)
+	price, err := client.GetProductPriceWithProductID(productID)
 	require.NoError(t, err)
-	log.Println(prices)
+	require.NotNil(t, price)
 }
