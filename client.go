@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	baseURL        = "https://api.tcgplayer.com/"
+	BaseURL        = "https://api.tcgplayer.com/"
 	CurrentVersion = "v1.36.0"
 )
 
@@ -51,7 +51,7 @@ func New(publicKey string, privateKey string) (*Client, error) {
 }
 
 func generateURL(path string) string {
-	return fmt.Sprintf("%s/%s/%s", baseURL, CurrentVersion, path)
+	return fmt.Sprintf("%s/%s/%s", BaseURL, CurrentVersion, path)
 }
 
 func get(client *Client, path string, p APIParams, apiResponse interface{}) error {

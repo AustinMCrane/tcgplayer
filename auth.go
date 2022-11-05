@@ -12,7 +12,7 @@ type AuthTokenResponse struct {
 }
 
 func getAuthToken(publicKey string, privateKey string) (*AuthTokenResponse, error) {
-	u := baseURL + "token"
+	u := BaseURL + "token"
 	response, err := http.PostForm(
 		u,
 		url.Values{
