@@ -54,10 +54,11 @@ type ProductParams struct {
 
 type SKU struct {
 	SKUID       int `json:"skuId"`
-ProductID   int `json:"productId"`
-anguageID  int `json:"languageId"`
-	ntingID  int `json:"printingId"`
-	itionID int `json:"conditionId"`}
+	ProductID   int `json:"productId"`
+	LanguageID  int `json:"languageId"`
+	PrintingID  int `json:"printingId"`
+	ConditionID int `json:"conditionId"`
+}
 
 func (p ProductParams) SetQueryParams(q *url.Values) {
 	q.Add("productName", p.ProductName)
