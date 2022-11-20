@@ -9,7 +9,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-const (
+var (
 	BaseURL        = "https://api.tcgplayer.com/"
 	CurrentVersion = "v1.36.0"
 )
