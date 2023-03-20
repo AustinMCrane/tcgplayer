@@ -26,6 +26,7 @@ type Product struct {
 	GroupID      int            `json:"groupId"`
 	URL          string         `json:"url"`
 	ExtendedData []ExtendedData `json:"extendedData"`
+	SKUS         []SKU          `json:"skus"`
 	//ModifiedOn time.Time `json:"modifiedOn"`
 }
 
@@ -71,7 +72,7 @@ type ProductListAPIResponse struct {
 
 func (client *Client) ListAllProducts(params ProductParams) ([]*Product, error) {
 	var productAPIResponse ProductListAPIResponse
-	u := "/catalog/products?getExtendedFields=true&productName=" + url.QueryEscape(params.ProductName) +
+	u := "/catalog/products?includeSkus=true&getExtendedFields=true&productName=" + url.QueryEscape(params.ProductName) +
 		"&categoryId=" + strconv.Itoa(params.CategoryID)
 	if params.GroupName != "" {
 		u = u + "&groupName=" + url.QueryEscape(params.GroupName)
