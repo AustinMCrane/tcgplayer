@@ -9,12 +9,13 @@ type Category struct {
 	Name       string `json:"displayName"`
 	ModifiedOn string `json:"modifiedOn"`
 }
+
 type CategoryAPIResponse struct {
 	Results []*Category `json:"results"`
 }
 
 func (client *Client) GetCategories() ([]*Category, error) {
-	u := "/catalog/categories"
+	u := "/catalog/categories?limit=100"
 
 	var categoryAPIResponse CategoryAPIResponse
 	err := get(client, u, nil, &categoryAPIResponse)
