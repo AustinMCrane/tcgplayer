@@ -110,6 +110,7 @@ func (client *Client) ListProductSKUs(productID int) ([]*SKU, error) {
 
 type Group struct {
 	ID           int    `json:"groupId"`
+	CategoryID   int    `json:"categoryId"`
 	Name         string `json:"name"`
 	Abbreviation string `json:"abbreviation"`
 	PublishedOn  string `json:"publishedOn"`

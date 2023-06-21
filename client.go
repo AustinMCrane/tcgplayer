@@ -11,7 +11,7 @@ import (
 
 var (
 	BaseURL        = "https://api.tcgplayer.com/"
-	CurrentVersion = "v1.36.0"
+	CurrentVersion = "v1.39.0"
 )
 
 var (
