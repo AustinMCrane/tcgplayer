@@ -73,12 +73,224 @@ type CategoryResponse struct {
 	TotalItems *int `json:"totalItems,omitempty"`
 }
 
+// Condition defines model for Condition.
+type Condition struct {
+	// Abbreviation Abbreviation like Rare = R
+	Abbreviation string `json:"abbreviation"`
+
+	// ConditionId Unique identifier for the condition
+	ConditionId int `json:"conditionId"`
+
+	// DisplayOrder Display order
+	DisplayOrder int `json:"displayOrder"`
+
+	// Name Display name/text for the rarity
+	Name string `json:"name"`
+}
+
+// ConditionResponse defines model for ConditionResponse.
+type ConditionResponse struct {
+	// Errors Array of error messages
+	Errors []string `json:"errors"`
+
+	// Results Array of condition objects
+	Results []Condition `json:"results"`
+
+	// Success Indicates if the request was successful
+	Success bool `json:"success"`
+
+	// TotalItems Total number of items
+	TotalItems *int `json:"totalItems,omitempty"`
+}
+
+// Group defines model for Group.
+type Group struct {
+	// Abbreviation Abbreviation like set code
+	Abbreviation string `json:"abbreviation"`
+
+	// CategoryId Unique identifier for the category it belongs to
+	CategoryId int `json:"categoryId"`
+
+	// GroupId Unique identifier for the group
+	GroupId int `json:"groupId"`
+
+	// IsSupplemental Honestly no idea...
+	IsSupplemental bool `json:"isSupplemental"`
+
+	// ModifiedOn Modified on date
+	ModifiedOn string `json:"modifiedOn"`
+
+	// Name Display name/text for the group
+	Name string `json:"name"`
+
+	// PublishedOn Published on date
+	PublishedOn string `json:"publishedOn"`
+}
+
+// GroupResponse defines model for GroupResponse.
+type GroupResponse struct {
+	// Errors Array of error messages
+	Errors []string `json:"errors"`
+
+	// Results Array of group objects
+	Results []Group `json:"results"`
+
+	// Success Indicates if the request was successful
+	Success bool `json:"success"`
+
+	// TotalItems Total number of items
+	TotalItems *int `json:"totalItems,omitempty"`
+}
+
+// Language defines model for Language.
+type Language struct {
+	// Abbr Abbreviation like EN
+	Abbr string `json:"abbr"`
+
+	// LanguageId Unique identifier for the language
+	LanguageId int `json:"languageId"`
+
+	// Name Display name/text for the languge
+	Name string `json:"name"`
+}
+
+// LanguageResponse defines model for LanguageResponse.
+type LanguageResponse struct {
+	// Errors Array of error messages
+	Errors []string `json:"errors"`
+
+	// Results Array of language objects
+	Results []Language `json:"results"`
+
+	// Success Indicates if the request was successful
+	Success bool `json:"success"`
+
+	// TotalItems Total number of items
+	TotalItems *int `json:"totalItems,omitempty"`
+}
+
+// Printing defines model for Printing.
+type Printing struct {
+	// DisplayOrder Display order
+	DisplayOrder int `json:"displayOrder"`
+
+	// ModifiedOn Modified on date
+	ModifiedOn string `json:"modifiedOn"`
+
+	// Name Display name/text for the rarity
+	Name string `json:"name"`
+
+	// RarityId Unique identifier for the printing
+	RarityId *int `json:"rarityId,omitempty"`
+}
+
+// PrintingResponse defines model for PrintingResponse.
+type PrintingResponse struct {
+	// Errors Array of error messages
+	Errors []string `json:"errors"`
+
+	// Results Array of printing objects
+	Results []Printing `json:"results"`
+
+	// Success Indicates if the request was successful
+	Success bool `json:"success"`
+
+	// TotalItems Total number of items
+	TotalItems *int `json:"totalItems,omitempty"`
+}
+
+// Product defines model for Product.
+type Product struct {
+	CategoryId int    `json:"categoryId"`
+	CleanName  string `json:"cleanName"`
+	GroupId    int    `json:"groupId"`
+	ImageUrl   string `json:"imageUrl"`
+	ModifiedOn string `json:"modifiedOn"`
+	Name       string `json:"name"`
+	ProductId  int    `json:"productId"`
+	Url        string `json:"url"`
+}
+
+// ProductResponse defines model for ProductResponse.
+type ProductResponse struct {
+	// Errors Array of error messages
+	Errors *[]string `json:"errors,omitempty"`
+
+	// Results Array of product objects
+	Results *[]Product `json:"results,omitempty"`
+
+	// Success Indicates if the request was successful
+	Success *bool `json:"success,omitempty"`
+
+	// TotalItems Total number of items
+	TotalItems *int `json:"totalItems,omitempty"`
+}
+
+// Rarity defines model for Rarity.
+type Rarity struct {
+	// DbValue A single char db value like "T"
+	DbValue string `json:"dbValue"`
+
+	// DisplayText Display name/text for the rarity
+	DisplayText string `json:"displayText"`
+
+	// RarityId Unique identifier for the rarity
+	RarityId int `json:"rarityId"`
+}
+
+// RarityResponse defines model for RarityResponse.
+type RarityResponse struct {
+	// Errors Array of error messages
+	Errors []string `json:"errors"`
+
+	// Results Array of rarity objects
+	Results []Rarity `json:"results"`
+
+	// Success Indicates if the request was successful
+	Success bool `json:"success"`
+
+	// TotalItems Total number of items
+	TotalItems *int `json:"totalItems,omitempty"`
+}
+
 // GetCategoriesParams defines parameters for GetCategories.
 type GetCategoriesParams struct {
 	Offset    int     `form:"offset" json:"offset"`
 	Limit     int     `form:"limit" json:"limit"`
 	SortOrder *string `form:"sortOrder,omitempty" json:"sortOrder,omitempty"`
 	SortDesc  *bool   `form:"sortDesc,omitempty" json:"sortDesc,omitempty"`
+}
+
+// GetGroupsParams defines parameters for GetGroups.
+type GetGroupsParams struct {
+	Offset int `form:"offset" json:"offset"`
+	Limit  int `form:"limit" json:"limit"`
+}
+
+// GetProductsParams defines parameters for GetProducts.
+type GetProductsParams struct {
+	// CategoryId Unique identifier for the category
+	CategoryId int `form:"categoryId" json:"categoryId"`
+
+	// CategoryName Name for the category
+	CategoryName *int `form:"categoryName,omitempty" json:"categoryName,omitempty"`
+
+	// GroupId Unique identifier for the group
+	GroupId *int `form:"groupId,omitempty" json:"groupId,omitempty"`
+
+	// GroupName Name of the group
+	GroupName *string `form:"groupName,omitempty" json:"groupName,omitempty"`
+
+	// ProductName Name of the product
+	ProductName *string `form:"productName,omitempty" json:"productName,omitempty"`
+
+	// GetExtendedFields Get extra info
+	GetExtendedFields *bool `form:"getExtendedFields,omitempty" json:"getExtendedFields,omitempty"`
+
+	// ProductTypes Types of products like cards comma seperated list of types
+	ProductTypes *string `form:"productTypes,omitempty" json:"productTypes,omitempty"`
+	Offset       *int    `form:"offset,omitempty" json:"offset,omitempty"`
+	Limit        *int    `form:"limit,omitempty" json:"limit,omitempty"`
 }
 
 // PostTokenFormdataBody defines parameters for PostToken.
@@ -170,6 +382,24 @@ type ClientInterface interface {
 	// GetCategory request
 	GetCategory(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetConditions request
+	GetConditions(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetGroups request
+	GetGroups(ctx context.Context, categoryId int, params *GetGroupsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetLanguages request
+	GetLanguages(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetPrintings request
+	GetPrintings(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetRarities request
+	GetRarities(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetProducts request
+	GetProducts(ctx context.Context, params *GetProductsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// PostToken request with any body
 	PostTokenWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -190,6 +420,78 @@ func (c *Client) GetCategories(ctx context.Context, params *GetCategoriesParams,
 
 func (c *Client) GetCategory(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetCategoryRequest(c.Server, categoryId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetConditions(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetConditionsRequest(c.Server, categoryId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetGroups(ctx context.Context, categoryId int, params *GetGroupsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetGroupsRequest(c.Server, categoryId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetLanguages(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetLanguagesRequest(c.Server, categoryId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetPrintings(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetPrintingsRequest(c.Server, categoryId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetRarities(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetRaritiesRequest(c.Server, categoryId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetProducts(ctx context.Context, params *GetProductsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetProductsRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -347,6 +649,379 @@ func NewGetCategoryRequest(server string, categoryId int) (*http.Request, error)
 	return req, nil
 }
 
+// NewGetConditionsRequest generates requests for GetConditions
+func NewGetConditionsRequest(server string, categoryId int) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "categoryId", runtime.ParamLocationPath, categoryId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/catalog/categories/%s/conditions", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetGroupsRequest generates requests for GetGroups
+func NewGetGroupsRequest(server string, categoryId int, params *GetGroupsParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "categoryId", runtime.ParamLocationPath, categoryId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/catalog/categories/%s/groups", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "offset", runtime.ParamLocationQuery, params.Offset); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "limit", runtime.ParamLocationQuery, params.Limit); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetLanguagesRequest generates requests for GetLanguages
+func NewGetLanguagesRequest(server string, categoryId int) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "categoryId", runtime.ParamLocationPath, categoryId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/catalog/categories/%s/languages", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetPrintingsRequest generates requests for GetPrintings
+func NewGetPrintingsRequest(server string, categoryId int) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "categoryId", runtime.ParamLocationPath, categoryId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/catalog/categories/%s/printings", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetRaritiesRequest generates requests for GetRarities
+func NewGetRaritiesRequest(server string, categoryId int) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "categoryId", runtime.ParamLocationPath, categoryId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/catalog/categories/%s/rarities", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetProductsRequest generates requests for GetProducts
+func NewGetProductsRequest(server string, params *GetProductsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/catalog/products")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "categoryId", runtime.ParamLocationQuery, params.CategoryId); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if params.CategoryName != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "categoryName", runtime.ParamLocationQuery, *params.CategoryName); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.GroupId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "groupId", runtime.ParamLocationQuery, *params.GroupId); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.GroupName != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "groupName", runtime.ParamLocationQuery, *params.GroupName); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.ProductName != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "productName", runtime.ParamLocationQuery, *params.ProductName); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.GetExtendedFields != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "getExtendedFields", runtime.ParamLocationQuery, *params.GetExtendedFields); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.ProductTypes != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "productTypes", runtime.ParamLocationQuery, *params.ProductTypes); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Offset != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "offset", runtime.ParamLocationQuery, *params.Offset); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Limit != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "limit", runtime.ParamLocationQuery, *params.Limit); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewPostTokenRequestWithFormdataBody calls the generic PostToken builder with application/x-www-form-urlencoded body
 func NewPostTokenRequestWithFormdataBody(server string, body PostTokenFormdataRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
@@ -436,6 +1111,24 @@ type ClientWithResponsesInterface interface {
 	// GetCategory request
 	GetCategoryWithResponse(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*GetCategoryResponse, error)
 
+	// GetConditions request
+	GetConditionsWithResponse(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*GetConditionsResponse, error)
+
+	// GetGroups request
+	GetGroupsWithResponse(ctx context.Context, categoryId int, params *GetGroupsParams, reqEditors ...RequestEditorFn) (*GetGroupsResponse, error)
+
+	// GetLanguages request
+	GetLanguagesWithResponse(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*GetLanguagesResponse, error)
+
+	// GetPrintings request
+	GetPrintingsWithResponse(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*GetPrintingsResponse, error)
+
+	// GetRarities request
+	GetRaritiesWithResponse(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*GetRaritiesResponse, error)
+
+	// GetProducts request
+	GetProductsWithResponse(ctx context.Context, params *GetProductsParams, reqEditors ...RequestEditorFn) (*GetProductsResponse, error)
+
 	// PostToken request with any body
 	PostTokenWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostTokenResponse, error)
 
@@ -486,6 +1179,138 @@ func (r GetCategoryResponse) StatusCode() int {
 	return 0
 }
 
+type GetConditionsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ConditionResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r GetConditionsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetConditionsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetGroupsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *GroupResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r GetGroupsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetGroupsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetLanguagesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *LanguageResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r GetLanguagesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetLanguagesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetPrintingsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *PrintingResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r GetPrintingsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetPrintingsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetRaritiesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *RarityResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r GetRaritiesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetRaritiesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetProductsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ProductResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r GetProductsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetProductsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type PostTokenResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -524,6 +1349,60 @@ func (c *ClientWithResponses) GetCategoryWithResponse(ctx context.Context, categ
 		return nil, err
 	}
 	return ParseGetCategoryResponse(rsp)
+}
+
+// GetConditionsWithResponse request returning *GetConditionsResponse
+func (c *ClientWithResponses) GetConditionsWithResponse(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*GetConditionsResponse, error) {
+	rsp, err := c.GetConditions(ctx, categoryId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetConditionsResponse(rsp)
+}
+
+// GetGroupsWithResponse request returning *GetGroupsResponse
+func (c *ClientWithResponses) GetGroupsWithResponse(ctx context.Context, categoryId int, params *GetGroupsParams, reqEditors ...RequestEditorFn) (*GetGroupsResponse, error) {
+	rsp, err := c.GetGroups(ctx, categoryId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetGroupsResponse(rsp)
+}
+
+// GetLanguagesWithResponse request returning *GetLanguagesResponse
+func (c *ClientWithResponses) GetLanguagesWithResponse(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*GetLanguagesResponse, error) {
+	rsp, err := c.GetLanguages(ctx, categoryId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetLanguagesResponse(rsp)
+}
+
+// GetPrintingsWithResponse request returning *GetPrintingsResponse
+func (c *ClientWithResponses) GetPrintingsWithResponse(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*GetPrintingsResponse, error) {
+	rsp, err := c.GetPrintings(ctx, categoryId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetPrintingsResponse(rsp)
+}
+
+// GetRaritiesWithResponse request returning *GetRaritiesResponse
+func (c *ClientWithResponses) GetRaritiesWithResponse(ctx context.Context, categoryId int, reqEditors ...RequestEditorFn) (*GetRaritiesResponse, error) {
+	rsp, err := c.GetRarities(ctx, categoryId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetRaritiesResponse(rsp)
+}
+
+// GetProductsWithResponse request returning *GetProductsResponse
+func (c *ClientWithResponses) GetProductsWithResponse(ctx context.Context, params *GetProductsParams, reqEditors ...RequestEditorFn) (*GetProductsResponse, error) {
+	rsp, err := c.GetProducts(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetProductsResponse(rsp)
 }
 
 // PostTokenWithBodyWithResponse request with arbitrary body returning *PostTokenResponse
@@ -585,6 +1464,162 @@ func ParseGetCategoryResponse(rsp *http.Response) (*GetCategoryResponse, error) 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest CategoryResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetConditionsResponse parses an HTTP response from a GetConditionsWithResponse call
+func ParseGetConditionsResponse(rsp *http.Response) (*GetConditionsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetConditionsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ConditionResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetGroupsResponse parses an HTTP response from a GetGroupsWithResponse call
+func ParseGetGroupsResponse(rsp *http.Response) (*GetGroupsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetGroupsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest GroupResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetLanguagesResponse parses an HTTP response from a GetLanguagesWithResponse call
+func ParseGetLanguagesResponse(rsp *http.Response) (*GetLanguagesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetLanguagesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest LanguageResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetPrintingsResponse parses an HTTP response from a GetPrintingsWithResponse call
+func ParseGetPrintingsResponse(rsp *http.Response) (*GetPrintingsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetPrintingsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PrintingResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetRaritiesResponse parses an HTTP response from a GetRaritiesWithResponse call
+func ParseGetRaritiesResponse(rsp *http.Response) (*GetRaritiesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetRaritiesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest RarityResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetProductsResponse parses an HTTP response from a GetProductsWithResponse call
+func ParseGetProductsResponse(rsp *http.Response) (*GetProductsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetProductsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ProductResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
