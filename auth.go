@@ -3,15 +3,17 @@ package tcgplayer
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
+
+	errors "github.com/AustinMCrane/errorutil"
+	"github.com/deepmap/oapi-codegen/pkg/securityprovider"
 )
 
-type AuthTokenResponse struct {
-	AuthToken
-}
+const BaseURL = "https://api.tcgplayer.com/v1.39.0/"
 
-func getAuthToken(publicKey string, privateKey string) (*AuthTokenResponse, error) {
+func GetAuthTokenProvider(publicKey string, privateKey string) (RequestEditorFn, error) {
 	u := BaseURL + "token"
 	response, err := http.PostForm(
 		u,
@@ -26,7 +28,9 @@ func getAuthToken(publicKey string, privateKey string) (*AuthTokenResponse, erro
 	}
 
 	if response.StatusCode != http.StatusOK {
-		return nil, ErrUnauthorized
+		log.Println(response.StatusCode)
+		log.Println(response.Body)
+		return nil, errors.New("Status code was not 200")
 	}
 
 	defer response.Body.Close()
@@ -41,5 +45,12 @@ func getAuthToken(publicKey string, privateKey string) (*AuthTokenResponse, erro
 		return nil, err
 	}
 
-	return &authResponse, nil
+	// Example BearerToken
+	// See: https://swagger.io/docs/specification/authentication/bearer-authentication/
+	bearerTokenProvider, bearerTokenProviderErr := securityprovider.NewSecurityProviderBearerToken(authResponse.AccessToken)
+	if bearerTokenProviderErr != nil {
+		return nil, errors.New("Error creating bearer token provider")
+	}
+
+	return bearerTokenProvider.Intercept, nil
 }

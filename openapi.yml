@@ -1,0 +1,174 @@
+openapi: 3.0.0
+info:
+  title: TCGPlayer Catalog API
+  version: 1.0.0
+servers:
+  - url: https://api.tcgplayer.com/v1.39.0/
+paths:
+  /token:
+    post:
+      summary: Get access token for bear auth
+      requestBody:
+        description: Necessariy info to get a token
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                grant_type:
+                  type: string
+                  default: client_credentials
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+              required:
+                - grant_type
+                - client_id
+                - client_secret
+      responses:
+        200:
+          description: Got token successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenResponse'
+  /catalog/categories:
+    get:
+      summary: Retrieve categories
+      operationId: getCategories
+      parameters:
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: integer
+            default: 0
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            default: 10
+        - name: sortOrder
+          in: query
+          schema:
+            type: string
+        - name: sortDesc
+          in: query
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+  /catalog/categories/{categoryId}:
+    get:
+      summary: Retrieve a specific category
+      operationId: getCategory
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the category
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  # optional, for documentation purposes only
+  schemas:
+    CategoryResponse:
+      type: object
+      required:
+        - success
+        - errors
+        - results
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        errors:
+          type: array
+          items:
+            type: string
+          description: Array of error messages
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+          description: Array of category objects
+
+
+    Category:
+      type: object
+      required:
+        - categoryId
+        - name
+        - modifiedOn
+        - displayName
+        - seoCategoryName
+        - sealedLabel
+        - nonSealedLabel
+        - conditionGuideUrl
+        - isScannable
+        - popularity
+      properties:
+        categoryId:
+          type: integer
+          description: Unique identifier for the category
+        name:
+          type: string
+          description: Name of the category
+        modifiedOn:
+          type: string
+          #format: date-time
+          description: Last modified date and time
+        displayName:
+          type: string
+          description: Display name of the category
+        seoCategoryName:
+          type: string
+          description: SEO-friendly name of the category
+        sealedLabel:
+          type: string
+          description: Sealed label
+        nonSealedLabel:
+          type: string
+          description: Non-sealed label
+        conditionGuideUrl:
+          type: string
+          description: URL for the condition guide
+        isScannable:
+          type: boolean
+          description: Indicates if the category is scannable
+        popularity:
+          type: integer
+          description: Popularity of the category
+    AuthTokenResponse:
+      required:
+        - access_token
+        - token_type
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+security:
+  - bearerAuth: []
