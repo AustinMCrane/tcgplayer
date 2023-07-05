@@ -1,0 +1,718 @@
+openapi: 3.0.0
+info:
+  title: TCGPlayer Catalog API
+  version: 1.0.0
+servers:
+  - url: https://api.tcgplayer.com/v1.39.0/
+paths:
+  /token:
+    post:
+      summary: Get access token for bear auth
+      requestBody:
+        description: Necessariy info to get a token
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                grant_type:
+                  type: string
+                  default: client_credentials
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+              required:
+                - grant_type
+                - client_id
+                - client_secret
+      responses:
+        200:
+          description: Got token successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenResponse'
+  /catalog/products:
+    get:
+      summary: Retrieve products
+      operationId: getProducts
+      parameters:
+        - name: categoryId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the category
+        - name: categoryName
+          in: query
+          schema:
+            type: integer
+          description: Name for the category
+        - name: groupId
+          in: query
+          schema:
+            type: integer
+          description: Unique identifier for the group
+        - name: groupName
+          in: query
+          schema:
+            type: string
+          description: Name of the group
+        - name: productName
+          in: query
+          schema:
+            type: string
+          description: Name of the product
+        - name: getExtendedFields
+          in: query
+          schema:
+            type: boolean
+          description: Get extra info
+        - name: productTypes
+          in: query
+          schema:
+            type: string
+          description: Types of products like cards comma seperated list of types
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+  /catalog/products/{productId}/skus:
+    get:
+      summary: List Product SKUs
+      operationId: getProductSkus
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the category
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SKUResponse'
+
+
+  /catalog/categories:
+    get:
+      summary: Retrieve categories
+      operationId: getCategories
+      parameters:
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: integer
+            default: 0
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            default: 10
+        - name: sortOrder
+          in: query
+          schema:
+            type: string
+        - name: sortDesc
+          in: query
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+  /catalog/categories/{categoryId}:
+    get:
+      summary: Retrieve a specific category
+      operationId: getCategory
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the category
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+  /catalog/categories/{categoryId}/groups:
+    get:
+      summary: Retrieve groups
+      operationId: getGroups
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the category
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: integer
+            default: 0
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            default: 10
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+
+  /catalog/categories/{categoryId}/rarities:
+    get:
+      summary: Retrieve categories
+      operationId: getRarities
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the category
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RarityResponse'
+  /catalog/categories/{categoryId}/printings:
+    get:
+      summary: Retrieve printings
+      operationId: getPrintings
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the category
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintingResponse'
+  /catalog/categories/{categoryId}/conditions:
+    get:
+      summary: Retrieve conditions
+      operationId: getConditions
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the category
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConditionResponse'
+  /catalog/categories/{categoryId}/languages:
+    get:
+      summary: Retrieve languages
+      operationId: getLanguages
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the category
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LanguageResponse'
+  /pricing/sku/{skuIds}:
+    get:
+      summary: Retrieve price for sku
+      operationId: getSKUPricing
+      parameters:
+        - name: skuIds
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier for the sku
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  # optional, for documentation purposes only
+  schemas:
+    CategoryResponse:
+      type: object
+      required:
+        - success
+        - errors
+        - results
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        errors:
+          type: array
+          items:
+            type: string
+          description: Array of error messages
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+          description: Array of category objects
+
+
+    Category:
+      type: object
+      required:
+        - categoryId
+        - name
+        - modifiedOn
+        - displayName
+        - seoCategoryName
+        - sealedLabel
+        - nonSealedLabel
+        - conditionGuideUrl
+        - isScannable
+        - popularity
+      properties:
+        categoryId:
+          type: integer
+          description: Unique identifier for the category
+        name:
+          type: string
+          description: Name of the category
+        modifiedOn:
+          type: string
+          #format: date-time
+          description: Last modified date and time
+        displayName:
+          type: string
+          description: Display name of the category
+        seoCategoryName:
+          type: string
+          description: SEO-friendly name of the category
+        sealedLabel:
+          type: string
+          description: Sealed label
+        nonSealedLabel:
+          type: string
+          description: Non-sealed label
+        conditionGuideUrl:
+          type: string
+          description: URL for the condition guide
+        isScannable:
+          type: boolean
+          description: Indicates if the category is scannable
+        popularity:
+          type: integer
+          description: Popularity of the category
+    RarityResponse:
+      type: object
+      required:
+        - success
+        - errors
+        - results
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        errors:
+          type: array
+          items:
+            type: string
+          description: Array of error messages
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rarity'
+          description: Array of rarity objects
+    Rarity:
+      type: object
+      required:
+        - rarityId
+        - displayText
+        - dbValue
+      properties:
+        rarityId:
+          type: integer
+          description: Unique identifier for the rarity
+        displayText:
+          type: string
+          description: Display name/text for the rarity
+        dbValue:
+          type: string
+          description: A single char db value like "T"
+    PrintingResponse:
+      type: object
+      required:
+        - success
+        - errors
+        - results
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        errors:
+          type: array
+          items:
+            type: string
+          description: Array of error messages
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Printing'
+          description: Array of printing objects
+    Printing:
+      type: object
+      required:
+        - printingId
+        - name
+        - displayOrder
+        - modifiedOn
+      properties:
+        rarityId:
+          type: integer
+          description: Unique identifier for the printing
+        name:
+          type: string
+          description: Display name/text for the rarity
+        displayOrder:
+          type: integer
+          description: Display order
+        modifiedOn:
+          type: string
+          description: Modified on date
+    ConditionResponse:
+      type: object
+      required:
+        - success
+        - errors
+        - results
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        errors:
+          type: array
+          items:
+            type: string
+          description: Array of error messages
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Condition'
+          description: Array of condition objects
+    Condition:
+      type: object
+      required:
+        - conditionId
+        - name
+        - abbreviation
+        - displayOrder
+      properties:
+        conditionId:
+          type: integer
+          description: Unique identifier for the condition
+        name:
+          type: string
+          description: Display name/text for the rarity
+        abbreviation:
+          type: string
+          description: Abbreviation like Rare = R
+        displayOrder:
+          type: integer
+          description: Display order
+    LanguageResponse:
+      type: object
+      required:
+        - success
+        - errors
+        - results
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        errors:
+          type: array
+          items:
+            type: string
+          description: Array of error messages
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Language'
+          description: Array of language objects
+    Language:
+      type: object
+      required:
+        - languageId
+        - name
+        - abbr
+      properties:
+        languageId:
+          type: integer
+          description: Unique identifier for the language
+        name:
+          type: string
+          description: Display name/text for the languge
+        abbr:
+          type: string
+          description: Abbreviation like EN
+    GroupResponse:
+      type: object
+      required:
+        - success
+        - errors
+        - results
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        errors:
+          type: array
+          items:
+            type: string
+          description: Array of error messages
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+          description: Array of group objects
+    Group:
+      type: object
+      required:
+        - groupId 
+        - name
+        - abbreviation
+        - isSupplemental
+        - publishedOn
+        - modifiedOn
+        - categoryId
+      properties:
+        groupId: 
+          type: integer
+          description: Unique identifier for the group
+        name:
+          type: string
+          description: Display name/text for the group
+        abbreviation:
+          type: string
+          description: Abbreviation like set code
+        isSupplemental:
+          type: boolean 
+          description: Honestly no idea...
+        publishedOn:
+          type: string
+          description: Published on date
+        modifiedOn:
+          type: string
+          description: Modified on date
+        categoryId: 
+          type: integer
+          description: Unique identifier for the category it belongs to
+    SKUResponse:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        errors:
+          type: array
+          items:
+            type: string
+          description: Array of error messages
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SKU'
+          description: Array of product objects
+    PriceResponse:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        errors:
+          type: array
+          items:
+            type: string
+          description: Array of error messages
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Price'
+          description: Array of sku prices
+    Price:
+      type: object
+      required:
+      properties:
+        skuId:
+          type: integer
+          description: sku id
+        lowPrice:
+          type: integer
+        lowestShipping:
+          type: integer
+        lowestListingPrice:
+          type: integer
+        marketPrice:
+          type: integer
+        directLowPrice:
+          type: integer
+    SKU:
+      type: object
+      required:
+        - skuId
+        - productId
+        - languageId
+        - printingId
+        - conditionId
+      properties:
+        skuId:
+          type: integer
+          description: sku id
+        productId:
+          type: integer
+          description: product id
+        languageId:
+          type: integer
+          description: lanugage id
+        printingId:
+          type: integer
+          description: printing id
+        conditionId:
+          type: integer
+          description: condition id
+    ProductResponse:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        errors:
+          type: array
+          items:
+            type: string
+          description: Array of error messages
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+          description: Array of product objects
+    Product:
+      required:
+        - productId
+        - name
+        - cleanName
+        - imageUrl
+        - categoryId
+        - groupId
+        - url
+        - modifiedOn
+      properties:
+        productId:
+          type: integer
+        name:
+          type: string
+        cleanName:
+          type: string
+        imageUrl:
+          type: string
+        categoryId:
+          type: integer
+        groupId:
+          type: integer
+        url:
+          type: string
+        modifiedOn:
+          type: string
+    AuthTokenResponse:
+      required:
+        - access_token
+        - token_type
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+security:
+  - bearerAuth: []
