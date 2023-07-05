@@ -169,6 +169,33 @@ type LanguageResponse struct {
 	TotalItems *int `json:"totalItems,omitempty"`
 }
 
+// Price defines model for Price.
+type Price struct {
+	DirectLowPrice     *int `json:"directLowPrice,omitempty"`
+	LowPrice           *int `json:"lowPrice,omitempty"`
+	LowestListingPrice *int `json:"lowestListingPrice,omitempty"`
+	LowestShipping     *int `json:"lowestShipping,omitempty"`
+	MarketPrice        *int `json:"marketPrice,omitempty"`
+
+	// SkuId sku id
+	SkuId *int `json:"skuId,omitempty"`
+}
+
+// PriceResponse defines model for PriceResponse.
+type PriceResponse struct {
+	// Errors Array of error messages
+	Errors *[]string `json:"errors,omitempty"`
+
+	// Results Array of sku prices
+	Results *[]Price `json:"results,omitempty"`
+
+	// Success Indicates if the request was successful
+	Success *bool `json:"success,omitempty"`
+
+	// TotalItems Total number of items
+	TotalItems *int `json:"totalItems,omitempty"`
+}
+
 // Printing defines model for Printing.
 type Printing struct {
 	// DisplayOrder Display order
@@ -248,6 +275,39 @@ type RarityResponse struct {
 
 	// Success Indicates if the request was successful
 	Success bool `json:"success"`
+
+	// TotalItems Total number of items
+	TotalItems *int `json:"totalItems,omitempty"`
+}
+
+// SKU defines model for SKU.
+type SKU struct {
+	// ConditionId condition id
+	ConditionId int `json:"conditionId"`
+
+	// LanguageId lanugage id
+	LanguageId int `json:"languageId"`
+
+	// PrintingId printing id
+	PrintingId int `json:"printingId"`
+
+	// ProductId product id
+	ProductId int `json:"productId"`
+
+	// SkuId sku id
+	SkuId int `json:"skuId"`
+}
+
+// SKUResponse defines model for SKUResponse.
+type SKUResponse struct {
+	// Errors Array of error messages
+	Errors *[]string `json:"errors,omitempty"`
+
+	// Results Array of product objects
+	Results *[]SKU `json:"results,omitempty"`
+
+	// Success Indicates if the request was successful
+	Success *bool `json:"success,omitempty"`
 
 	// TotalItems Total number of items
 	TotalItems *int `json:"totalItems,omitempty"`
@@ -400,6 +460,12 @@ type ClientInterface interface {
 	// GetProducts request
 	GetProducts(ctx context.Context, params *GetProductsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetProductSkus request
+	GetProductSkus(ctx context.Context, productId int, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetSKUPricing request
+	GetSKUPricing(ctx context.Context, skuIds string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// PostToken request with any body
 	PostTokenWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -492,6 +558,30 @@ func (c *Client) GetRarities(ctx context.Context, categoryId int, reqEditors ...
 
 func (c *Client) GetProducts(ctx context.Context, params *GetProductsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetProductsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetProductSkus(ctx context.Context, productId int, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetProductSkusRequest(c.Server, productId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetSKUPricing(ctx context.Context, skuIds string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetSKUPricingRequest(c.Server, skuIds)
 	if err != nil {
 		return nil, err
 	}
@@ -1022,6 +1112,74 @@ func NewGetProductsRequest(server string, params *GetProductsParams) (*http.Requ
 	return req, nil
 }
 
+// NewGetProductSkusRequest generates requests for GetProductSkus
+func NewGetProductSkusRequest(server string, productId int) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "productId", runtime.ParamLocationPath, productId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/catalog/products/%s/skus", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetSKUPricingRequest generates requests for GetSKUPricing
+func NewGetSKUPricingRequest(server string, skuIds string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "skuIds", runtime.ParamLocationPath, skuIds)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/pricing/sku/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewPostTokenRequestWithFormdataBody calls the generic PostToken builder with application/x-www-form-urlencoded body
 func NewPostTokenRequestWithFormdataBody(server string, body PostTokenFormdataRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
@@ -1128,6 +1286,12 @@ type ClientWithResponsesInterface interface {
 
 	// GetProducts request
 	GetProductsWithResponse(ctx context.Context, params *GetProductsParams, reqEditors ...RequestEditorFn) (*GetProductsResponse, error)
+
+	// GetProductSkus request
+	GetProductSkusWithResponse(ctx context.Context, productId int, reqEditors ...RequestEditorFn) (*GetProductSkusResponse, error)
+
+	// GetSKUPricing request
+	GetSKUPricingWithResponse(ctx context.Context, skuIds string, reqEditors ...RequestEditorFn) (*GetSKUPricingResponse, error)
 
 	// PostToken request with any body
 	PostTokenWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostTokenResponse, error)
@@ -1311,6 +1475,50 @@ func (r GetProductsResponse) StatusCode() int {
 	return 0
 }
 
+type GetProductSkusResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SKUResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r GetProductSkusResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetProductSkusResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetSKUPricingResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *PriceResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r GetSKUPricingResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetSKUPricingResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type PostTokenResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -1403,6 +1611,24 @@ func (c *ClientWithResponses) GetProductsWithResponse(ctx context.Context, param
 		return nil, err
 	}
 	return ParseGetProductsResponse(rsp)
+}
+
+// GetProductSkusWithResponse request returning *GetProductSkusResponse
+func (c *ClientWithResponses) GetProductSkusWithResponse(ctx context.Context, productId int, reqEditors ...RequestEditorFn) (*GetProductSkusResponse, error) {
+	rsp, err := c.GetProductSkus(ctx, productId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetProductSkusResponse(rsp)
+}
+
+// GetSKUPricingWithResponse request returning *GetSKUPricingResponse
+func (c *ClientWithResponses) GetSKUPricingWithResponse(ctx context.Context, skuIds string, reqEditors ...RequestEditorFn) (*GetSKUPricingResponse, error) {
+	rsp, err := c.GetSKUPricing(ctx, skuIds, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetSKUPricingResponse(rsp)
 }
 
 // PostTokenWithBodyWithResponse request with arbitrary body returning *PostTokenResponse
@@ -1620,6 +1846,58 @@ func ParseGetProductsResponse(rsp *http.Response) (*GetProductsResponse, error) 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest ProductResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetProductSkusResponse parses an HTTP response from a GetProductSkusWithResponse call
+func ParseGetProductSkusResponse(rsp *http.Response) (*GetProductSkusResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetProductSkusResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SKUResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetSKUPricingResponse parses an HTTP response from a GetSKUPricingWithResponse call
+func ParseGetSKUPricingResponse(rsp *http.Response) (*GetSKUPricingResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetSKUPricingResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PriceResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

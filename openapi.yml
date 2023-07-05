@@ -93,6 +93,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductResponse'
+  /catalog/products/{productId}/skus:
+    get:
+      summary: List Product SKUs
+      operationId: getProductSkus
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the category
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SKUResponse'
+
+
   /catalog/categories:
     get:
       summary: Retrieve categories
@@ -246,7 +266,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LanguageResponse'
-
+  /pricing/sku/{skuIds}:
+    get:
+      summary: Retrieve price for sku
+      operationId: getSKUPricing
+      parameters:
+        - name: skuIds
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier for the sku
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
 components:
   securitySchemes:
     bearerAuth:
@@ -543,6 +580,85 @@ components:
         categoryId: 
           type: integer
           description: Unique identifier for the category it belongs to
+    SKUResponse:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        errors:
+          type: array
+          items:
+            type: string
+          description: Array of error messages
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SKU'
+          description: Array of product objects
+    PriceResponse:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        errors:
+          type: array
+          items:
+            type: string
+          description: Array of error messages
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Price'
+          description: Array of sku prices
+    Price:
+      type: object
+      required:
+      properties:
+        skuId:
+          type: integer
+          description: sku id
+        lowPrice:
+          type: integer
+        lowestShipping:
+          type: integer
+        lowestListingPrice:
+          type: integer
+        marketPrice:
+          type: integer
+        directLowPrice:
+          type: integer
+    SKU:
+      type: object
+      required:
+        - skuId
+        - productId
+        - languageId
+        - printingId
+        - conditionId
+      properties:
+        skuId:
+          type: integer
+          description: sku id
+        productId:
+          type: integer
+          description: product id
+        languageId:
+          type: integer
+          description: lanugage id
+        printingId:
+          type: integer
+          description: printing id
+        conditionId:
+          type: integer
+          description: condition id
     ProductResponse:
       type: object
       properties:
