@@ -431,7 +431,7 @@ components:
         - displayOrder
         - modifiedOn
       properties:
-        rarityId:
+        printingId:
           type: integer
           description: Unique identifier for the printing
         name:
