@@ -207,8 +207,8 @@ type Printing struct {
 	// Name Display name/text for the rarity
 	Name string `json:"name"`
 
-	// RarityId Unique identifier for the printing
-	RarityId *int `json:"rarityId,omitempty"`
+	// PrintingId Unique identifier for the printing
+	PrintingId int `json:"printingId"`
 }
 
 // PrintingResponse defines model for PrintingResponse.
