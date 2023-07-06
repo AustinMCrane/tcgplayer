@@ -171,11 +171,11 @@ type LanguageResponse struct {
 
 // Price defines model for Price.
 type Price struct {
-	DirectLowPrice     *int `json:"directLowPrice,omitempty"`
-	LowPrice           *int `json:"lowPrice,omitempty"`
-	LowestListingPrice *int `json:"lowestListingPrice,omitempty"`
-	LowestShipping     *int `json:"lowestShipping,omitempty"`
-	MarketPrice        *int `json:"marketPrice,omitempty"`
+	DirectLowPrice     *float32 `json:"directLowPrice,omitempty"`
+	LowPrice           *float32 `json:"lowPrice,omitempty"`
+	LowestListingPrice *float32 `json:"lowestListingPrice,omitempty"`
+	LowestShipping     *float32 `json:"lowestShipping,omitempty"`
+	MarketPrice        *float32 `json:"marketPrice,omitempty"`
 
 	// SkuId sku id
 	SkuId *int `json:"skuId,omitempty"`

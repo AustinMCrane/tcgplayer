@@ -626,15 +626,15 @@ components:
           type: integer
           description: sku id
         lowPrice:
-          type: integer
+          type: number
         lowestShipping:
-          type: integer
+          type: number
         lowestListingPrice:
-          type: integer
+          type: number
         marketPrice:
-          type: integer
+          type: number
         directLowPrice:
-          type: integer
+          type: number
     SKU:
       type: object
       required:
