@@ -710,6 +710,22 @@ components:
           type: string
         modifiedOn:
           type: string
+        extendedDate:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExtendedData'
+    ExtendedData:
+      required:
+        - name
+        - displayName
+        - value
+      properties:
+          name:
+            type: string
+          displayName:
+            type: string
+          value:
+            type: string
     AuthTokenResponse:
       required:
         - access_token
