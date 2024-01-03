@@ -710,7 +710,7 @@ components:
           type: string
         modifiedOn:
           type: string
-        extendedDate:
+        extendedData:
           type: array
           items:
             $ref: '#/components/schemas/ExtendedData'

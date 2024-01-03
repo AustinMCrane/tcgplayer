@@ -237,7 +237,7 @@ type PrintingResponse struct {
 type Product struct {
 	CategoryId   int             `json:"categoryId"`
 	CleanName    string          `json:"cleanName"`
-	ExtendedDate *[]ExtendedData `json:"extendedDate,omitempty"`
+	ExtendedData *[]ExtendedData `json:"extendedData,omitempty"`
 	GroupId      int             `json:"groupId"`
 	ImageUrl     string          `json:"imageUrl"`
 	ModifiedOn   string          `json:"modifiedOn"`
